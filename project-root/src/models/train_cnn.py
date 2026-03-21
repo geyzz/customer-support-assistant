@@ -16,7 +16,7 @@ TRAIN_PATH = "output/train.csv"
 VAL_PATH   = "output/validation.csv"
 TEST_PATH  = "output/test.csv"
 GLOVE_PATH = "embeddings/glove.6B.300d.txt"
-SAVE_DIR   = "saved_models"
+SAVE_DIR   = "cnn_snapshot"
 os.makedirs(SAVE_DIR, exist_ok=True)
 
 # -----------------------------
@@ -179,7 +179,7 @@ for config in ablation_configs:
         if val_f1 > best_val_f1:
             best_val_f1 = val_f1
             wait = 0
-            best_model_path = os.path.join(SAVE_DIR, f"textcnn_best_{config['name']}.pt")
+            best_model_path = os.path.join(SAVE_DIR, f"textcnn_{config['name']}.pt")
             torch.save(model.state_dict(), best_model_path)
         else:
             wait += 1
