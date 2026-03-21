@@ -1,4 +1,4 @@
-<img width="765" height="748" alt="image" src="https://github.com/user-attachments/assets/952abd7b-1e08-467f-812d-1ac4a514f97a" /># Model Card Draft — Customer Support Assistant
+# Model Card Draft — Customer Support Assistant
 
 ## Model Details
 
