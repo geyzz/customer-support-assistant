@@ -6,6 +6,8 @@ from transformers import DistilBertTokenizer, DistilBertModel, DistilBertForSequ
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import pickle
+import os
 
 
 # LOAD MODELS
@@ -20,6 +22,27 @@ label_names = clf_model.config.id2label
 actions = list(responses.keys())
 
 context_dim = 768 + 1
+
+# SAVE / LOAD RL AGENT
+AGENT_PATH = "linucb_agent.pkl"
+
+def save_agent(agent):
+    with open(AGENT_PATH, "wb") as f:
+        pickle.dump(agent, f)
+
+def load_agent():
+    if os.path.exists(AGENT_PATH):
+        with open(AGENT_PATH, "rb") as f:
+            print("Loaded existing RL agent")
+            return pickle.load(f)
+    else:
+        print("Creating new RL agent")
+        return LinUCB(n_actions=len(actions), context_dim=context_dim, alpha=1.5)
+
+# SAVE FEEDBACK DATA
+def save_feedback(text, true_intent):
+    with open("feedback_data.csv", "a", encoding="utf-8") as f:
+        f.write(f"\"{text}\",{true_intent}\n")
 
 # GET CONTEXT
 def get_intent_and_context(text):
@@ -43,10 +66,9 @@ def get_intent_and_context(text):
 
     return intent, confidence, context_vector, pred_id.item()
 
-
 # CHATBOT MODE
 def run_chatbot():
-    agent = LinUCB(n_actions=len(actions), context_dim=context_dim, alpha=1.5)
+    agent = load_agent()
 
     print("Chatbot mode (type 'quit' to stop)")
 
@@ -55,34 +77,45 @@ def run_chatbot():
         text = input("User: ").lower()
 
         if text == "quit":
+            print("Saving agent before exit...")
+            save_agent(agent)
             break
 
         intent, confidence, context_vector, predicted_idx = get_intent_and_context(text)
 
-        action_idx = agent.select_action(context_vector, predicted_idx, confidence)
-        action_intent = actions[action_idx]
+        # Trust NLP if confident
+        if confidence > 0.8:
+            action_idx = predicted_idx
+        else:
+            action_idx = agent.select_action(context_vector, predicted_idx, confidence)
 
+        action_intent = actions[action_idx]
         reply = random.choice(responses[action_intent])
-        
+
         print(f"\n[NLP] Intent: {intent} | Confidence: {confidence:.2f}")
         print(f"[RL] Action: {action_intent}")
-        print("Bot:", reply)
+        print("Bot:", reply, "\n")
 
-        true_intent = input("Enter TRUE intent (optional): ").strip()
+        if confidence < 0.75:
+            true_intent = input("Low confidence. Enter TRUE intent (or press enter to skip): ").strip()
+        else:
+            true_intent = input("Enter TRUE intent (optional): ").strip()
 
         if true_intent:
             if action_intent == true_intent:
                 reward = 1.0
-            elif intent == true_intent:
-                reward = 0.5
             else:
                 reward = 0.0
 
             agent.update(action_idx, reward, context_vector)
 
+            if reward > 0:
+                save_agent(agent)
+
+            save_feedback(text, true_intent)
 
 # EXPERIMENT MODE
-def run_experiment():
+def run_rl():
     seeds = [42, 123, 999]
 
     all_rewards = []
@@ -93,7 +126,7 @@ def run_experiment():
         np.random.seed(seed)
         torch.manual_seed(seed)
 
-        agent = LinUCB(n_actions=len(actions), context_dim=context_dim, alpha=1.5)
+        agent = load_agent()
 
         cumulative_reward = 0
         cumulative_regret = 0
@@ -105,29 +138,35 @@ def run_experiment():
             text = input("Enter message (type 'quit' to stop & plot): ").lower()
 
             if text == "quit":
-                print("\nStopping experiment and showing graph...\n")
+                print("\nStopping rl and showing graph...\n")
                 break
 
             intent, confidence, context_vector, predicted_idx = get_intent_and_context(text)
 
-            action_idx = agent.select_action(context_vector, predicted_idx, confidence)
+            if confidence > 0.8:
+                action_idx = predicted_idx
+            else:
+                action_idx = agent.select_action(context_vector, predicted_idx, confidence)
+
             action_intent = actions[action_idx]
 
             print(f"NLP: {intent} | RL: {action_intent}")
 
             true_intent = input("Enter TRUE intent: ").strip()
 
-            # Reward
             if action_intent == true_intent:
                 reward = 1.0
-            elif intent == true_intent:
-                reward = 0.5
             else:
                 reward = 0.0
 
             regret = 1 - reward
 
             agent.update(action_idx, reward, context_vector)
+
+            if reward > 0:
+                save_agent(agent)
+
+            save_feedback(text, true_intent)
 
             cumulative_reward += reward
             cumulative_regret += regret
@@ -142,7 +181,6 @@ def run_experiment():
         if text == "quit":
             break
 
-    # PLOT
     if all_rewards:
         plt.figure()
         for i in range(len(all_rewards)):
@@ -158,14 +196,14 @@ def run_experiment():
         plt.title("Cumulative Regret")
         plt.legend()
         plt.show()
-        
-# MAIN SWITCH
+
+# MAIN
 if __name__ == "__main__":
-    mode = input("Select mode (chat / experiment): ").strip().lower()
+    mode = input("Select mode (chat / rl): ").strip().lower()
 
     if mode == "chat":
         run_chatbot()
-    elif mode == "experiment":
-        run_experiment()
+    elif mode == "rl":
+        run_rl()
     else:
         print("Invalid mode.")
