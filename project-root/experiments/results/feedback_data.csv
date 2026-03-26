@@ -1,0 +1,51 @@
+text, intent
+"where is my order?",track_order
+"i want to track my package",track_order
+"can you tell me the status of my delivery?",track_order
+"my order hasn’t arrived yet",track_order
+"can i stop my order?",cancel_order
+"refund this item please",get_refund
+"how do i return my purchase?",check_refund_policy
+"can i send this item back?",check_refund_policy
+"return process for my order?",check_refund_policy
+"estimated delivery time?",delivery_period
+"shipping duration?",delivery_period
+"can i pay using gcash?",check_payment_methods
+"i have a problem with my order",complaint
+"this product is defective",complaint
+"i’m not happy with my purchase",complaint
+"the item i received is damaged",complaint
+"can i modify my purchase?",change_order
+"edit my order details",change_order
+"can i change where my order is delivered?",
+"change_shipping_address"i want to register",create_account
+"how do i set up where my orders should be sent?",set_up_shipping_address
+"can i save a shipping address to my account?",set_up_shipping_address
+"can you send me a copy of my receipt?",get_invoice
+"how do i get the billing document?",get_invoice
+"can i make changes to my account settings?",edit_account
+"can i make changes to my account settings?",edit_account
+"what’s the usual delivery timeframe?",delivery_period
+"what’s the usual delivery timeframe?",delivery_period
+"is there a live agent available right now?",contact_human_agent
+"i need someone actual to handle this",contact_human_agent
+"how do i reach someone from your support team?",contact_customer_service
+"will i get charged if i back out of this order?",check_cancellation_fee
+"do you deduct anything if i cancel?",check_cancellation_fee
+"i accidentally used my old address, can you send it somewhere else?",change_shipping_address
+"i put the wrong house number, how do i fix that?",change_shipping_address
+"i just placed an order but i changed my mind, can this still be stopped?",cancel_order
+"i don’t think i need that item anymore, what can i do?",cancel_order
+"this whole experience has been really frustrating",complaint
+"i’m not satisfied with how this was handled",complaint
+"something went wrong and i want to report it",complaint
+"what do i need to sign up?",create_account
+"i picked the wrong variant, can that be fixed?",change_order
+"i need it sent somewhere else instead",change_shipping_address
+"am i going to lose money if i cancel this?",check_cancellation_fee
+"is there any cost involved if i back out?",check_cancellation_fee
+"will anything be deducted if i cancel?",check_cancellation_fee
+"i don’t plan on using this anymore",delete_account
+"i need to make changes to my profile",edit_account
+"is there a way to reverse that payment?",get_refund
+"what steps do i follow to order?",place_order
