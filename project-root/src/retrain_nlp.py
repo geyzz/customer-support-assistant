@@ -18,8 +18,8 @@ val_df = pd.read_csv("output/validation.csv")
 test_df = pd.read_csv("output/test.csv")
 
 # LOAD FEEDBACK DATA
-if os.path.exists("project-root/experiments/results/feedback_data.csv"):
-    feedback_df = pd.read_csv("project-root/experiments/results/feedback_data.csv")
+if os.path.exists("feedback_data.csv"):
+    feedback_df = pd.read_csv("feedback_data.csv")
     print(f"Loaded {len(feedback_df)} feedback samples")
 
     # Ensure correct column names
@@ -54,7 +54,7 @@ dataset = DatasetDict({
 dataset = dataset.class_encode_column("intent")
 
 # TOKENIZER
-tokenizer = DistilBertTokenizer.from_pretrained("project-root/experiments/results/fine_tuned_model")
+tokenizer = DistilBertTokenizer.from_pretrained("./fine_tuned_model")
 
 def preprocess_function(examples):
     texts = [str(t) for t in examples["text"]]
@@ -72,7 +72,7 @@ tokenized_dataset.set_format("torch")
 num_labels = len(dataset["train"].features["intent"].names)
 
 model = DistilBertForSequenceClassification.from_pretrained(
-    "project-root/experiments/results/fine_tuned_model",
+    "./fine_tuned_model",
     num_labels=num_labels
 )
 
@@ -140,7 +140,7 @@ print("\nMacro-F1:", macro_f1)
 model.config.id2label = {i: label for i, label in enumerate(label_names)}
 model.config.label2id = {label: i for i, label in enumerate(label_names)}
 
-model.save_pretrained("project-root/experiments/results/fine_tuned_model")
-tokenizer.save_pretrained("project-root/experiments/results/fine_tuned_model")
+model.save_pretrained("./fine_tuned_model")
+tokenizer.save_pretrained("./fine_tuned_model")
 
 print("\nRetraining complete. Model updated.")
