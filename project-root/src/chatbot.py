@@ -41,7 +41,7 @@ def load_agent():
 
 # SAVE FEEDBACK DATA
 def save_feedback(text, true_intent):
-    with open("feedback_data.csv", "a", encoding="utf-8") as f:
+    with open("project-root/experiments/results/feedback_data.csv", "a", encoding="utf-8") as f:
         f.write(f"\"{text}\",{true_intent}\n")
 
 # GET CONTEXT
