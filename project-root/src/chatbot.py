@@ -24,7 +24,7 @@ actions = list(responses.keys())
 context_dim = 768 + 1
 
 # SAVE / LOAD RL AGENT
-AGENT_PATH = "linucb_agent.pkl"
+AGENT_PATH = "project-root/experiments/results/linucb_agent.pkl"
 
 def save_agent(agent):
     with open(AGENT_PATH, "wb") as f:
