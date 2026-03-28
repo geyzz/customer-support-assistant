@@ -11,9 +11,9 @@ import os
 
 
 # LOAD MODELS
-tokenizer = DistilBertTokenizer.from_pretrained("project-root/experiments/results/fine_tuned_model")
-embed_model = DistilBertModel.from_pretrained("project-root/experiments/results/fine_tuned_model")
-clf_model = DistilBertForSequenceClassification.from_pretrained("project-root/experiments/results/fine_tuned_model")
+tokenizer = DistilBertTokenizer.from_pretrained("./fine_tuned_model")
+embed_model = DistilBertModel.from_pretrained("./fine_tuned_model")
+clf_model = DistilBertForSequenceClassification.from_pretrained("./fine_tuned_model")
 
 embed_model.eval()
 clf_model.eval()
@@ -24,7 +24,7 @@ actions = list(responses.keys())
 context_dim = 768 + 1
 
 # SAVE / LOAD RL AGENT
-AGENT_PATH = "project-root/experiments/results/linucb_agent.pkl"
+AGENT_PATH = "linucb_agent.pkl"
 
 def save_agent(agent):
     with open(AGENT_PATH, "wb") as f:
@@ -41,7 +41,7 @@ def load_agent():
 
 # SAVE FEEDBACK DATA
 def save_feedback(text, true_intent):
-    with open("project-root/experiments/results/feedback_data.csv", "a", encoding="utf-8") as f:
+    with open("feedback_data.csv", "a", encoding="utf-8") as f:
         f.write(f"\"{text}\",{true_intent}\n")
 
 # GET CONTEXT
