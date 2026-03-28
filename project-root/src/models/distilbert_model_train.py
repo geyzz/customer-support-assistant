@@ -102,5 +102,5 @@ model.config.id2label = {i: label for i, label in enumerate(label_names)}
 model.config.label2id = {label: i for i, label in enumerate(label_names)}
        
 # Save the model and tokenizer
-model.save_pretrained("./fine_tuned_model")
-tokenizer.save_pretrained("./fine_tuned_model")
+model.save_pretrained("project-root/experiments/results/fine_tuned_model")
+tokenizer.save_pretrained("project-root/experiments/results/fine_tuned_model")
