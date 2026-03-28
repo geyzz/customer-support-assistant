@@ -15,7 +15,7 @@ import seaborn as sns
 TRAIN_PATH = "output/train.csv"
 VAL_PATH   = "output/validation.csv"
 TEST_PATH  = "output/test.csv"
-GLOVE_PATH = "embeddings/glove.6B.300d.txt"
+GLOVE_PATH = "data/embeddings/glove.6B.300d.txt"
 SAVE_DIR   = "cnn_snapshot"
 os.makedirs(SAVE_DIR, exist_ok=True)
 
