@@ -27,7 +27,7 @@ Both produce identical outputs and follow the same 12-step pipeline.
 Place the dataset file at the following path before running:
 
 ```
-data/Bitext_Sample_Customer_Support_Training_Dataset_27K_responses-v11.csv
+project-root/data/Bitext_Sample_Customer_Support_Training_Dataset_27K_responses-v11.csv
 ```
 
 ---
