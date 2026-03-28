@@ -4,7 +4,7 @@ import re
 from sklearn.model_selection import train_test_split
 
 # 1. LOAD DATASET
-file_path = "dataset/Bitext_Sample_Customer_Support_Training_Dataset_27K_responses-v11.csv"
+file_path = "data/Bitext_Sample_Customer_Support_Training_Dataset_27K_responses-v11.csv"
 
 if not os.path.exists(file_path):
     raise FileNotFoundError(f"Dataset not found at {file_path}")
