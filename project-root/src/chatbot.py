@@ -9,11 +9,14 @@ import matplotlib.pyplot as plt
 import pickle
 import os
 
-
 # LOAD MODELS
-tokenizer = DistilBertTokenizer.from_pretrained("./fine_tuned_model")
-embed_model = DistilBertModel.from_pretrained("./fine_tuned_model")
-clf_model = DistilBertForSequenceClassification.from_pretrained("./fine_tuned_model")
+BASE = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE, "../experiments/results/fine_tuned_model")
+AGENT_PATH = os.path.join(BASE, "../experiments/results/linucb_agent.pkl")
+
+tokenizer = DistilBertTokenizer.from_pretrained(MODEL_PATH)
+embed_model = DistilBertModel.from_pretrained(MODEL_PATH)
+clf_model = DistilBertForSequenceClassification.from_pretrained(MODEL_PATH)
 
 embed_model.eval()
 clf_model.eval()
@@ -24,7 +27,6 @@ actions = list(responses.keys())
 context_dim = 768 + 1
 
 # SAVE / LOAD RL AGENT
-AGENT_PATH = "linucb_agent.pkl"
 
 def save_agent(agent):
     with open(AGENT_PATH, "wb") as f:
