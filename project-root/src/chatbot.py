@@ -11,9 +11,9 @@ import os
 
 
 # LOAD MODELS
-tokenizer = DistilBertTokenizer.from_pretrained("./fine_tuned_model")
-embed_model = DistilBertModel.from_pretrained("./fine_tuned_model")
-clf_model = DistilBertForSequenceClassification.from_pretrained("./fine_tuned_model")
+tokenizer = DistilBertTokenizer.from_pretrained("project-root/experiments/results/fine_tuned_model")
+embed_model = DistilBertModel.from_pretrained("project-root/experiments/results/fine_tuned_model")
+clf_model = DistilBertForSequenceClassification.from_pretrained("project-root/experiments/results/fine_tuned_model")
 
 embed_model.eval()
 clf_model.eval()
