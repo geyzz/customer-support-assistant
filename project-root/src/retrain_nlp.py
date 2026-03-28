@@ -18,8 +18,8 @@ val_df = pd.read_csv("output/validation.csv")
 test_df = pd.read_csv("output/test.csv")
 
 # LOAD FEEDBACK DATA
-if os.path.exists("feedback_data.csv"):
-    feedback_df = pd.read_csv("feedback_data.csv")
+if os.path.exists("project-root/experiments/results/feedback_data.csv"):
+    feedback_df = pd.read_csv("project-root/experiments/results/feedback_data.csv")
     print(f"Loaded {len(feedback_df)} feedback samples")
 
     # Ensure correct column names
