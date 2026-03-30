@@ -6,19 +6,18 @@ evaluate>=0.4.0
 scikit-learn>=1.3.0
 numpy>=1.24.0
 pandas>=2.0.0
- 
+
 # ── NLP / Embeddings ──────────────────────────────────────────────────────────
 gensim>=4.3.0          # for GloVe embeddings (TextCNN)
- 
+
 # ── Visualization ─────────────────────────────────────────────────────────────
 matplotlib>=3.7.0
 seaborn>=0.12.0
- 
+
 # ── Logging / Experiment tracking ─────────────────────────────────────────────
 tensorboard>=2.13.0
- 
+
 # ── Utilities ─────────────────────────────────────────────────────────────────
 tqdm>=4.65.0
 requests>=2.31.0
-kaggle>=1.5.16          # for dataset download via Kaggle API (optional)
 accelerate>=0.27.0      # required by HuggingFace Trainer
