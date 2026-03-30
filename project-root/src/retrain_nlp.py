@@ -12,14 +12,21 @@ import numpy as np
 import evaluate
 import os
 
+# PATHS
+BASE = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.join(BASE, "../output")
+MODEL_PATH = os.path.join(BASE, "../experiments/results/fine_tuned_model")
+RESULTS_PATH = os.path.join(BASE, "../experiments/results/checkpoints")
+FEEDBACK_PATH = os.path.join(BASE, "../feedback_data.csv")
+
 # LOAD ORIGINAL DATA
-train_df = pd.read_csv("output/train.csv")
-val_df = pd.read_csv("output/validation.csv")
-test_df = pd.read_csv("output/test.csv")
+train_df = pd.read_csv(os.path.join(OUTPUT_DIR, "train.csv"))
+val_df = pd.read_csv(os.path.join(OUTPUT_DIR, "validation.csv"))
+test_df = pd.read_csv(os.path.join(OUTPUT_DIR, "test.csv"))
 
 # LOAD FEEDBACK DATA
-if os.path.exists("feedback_data.csv"):
-    feedback_df = pd.read_csv("feedback_data.csv")
+if os.path.exists(FEEDBACK_PATH):
+    feedback_df = pd.read_csv(FEEDBACK_PATH)
     print(f"Loaded {len(feedback_df)} feedback samples")
 
     # Ensure correct column names
@@ -54,7 +61,7 @@ dataset = DatasetDict({
 dataset = dataset.class_encode_column("intent")
 
 # TOKENIZER
-tokenizer = DistilBertTokenizer.from_pretrained("./fine_tuned_model")
+tokenizer = DistilBertTokenizer.from_pretrained(MODEL_PATH)
 
 def preprocess_function(examples):
     texts = [str(t) for t in examples["text"]]
@@ -72,7 +79,7 @@ tokenized_dataset.set_format("torch")
 num_labels = len(dataset["train"].features["intent"].names)
 
 model = DistilBertForSequenceClassification.from_pretrained(
-    "./fine_tuned_model",
+    MODEL_PATH,
     num_labels=num_labels
 )
 
@@ -94,7 +101,7 @@ def compute_metrics(eval_pred):
 
 # TRAINING CONFIG
 training_args = TrainingArguments(
-    output_dir="./results",
+    output_dir=RESULTS_PATH,
     eval_strategy="epoch",      # evaluate at the end of each epoch
     save_strategy="epoch",            # save checkpoint each epoch
     learning_rate=2e-5,
@@ -140,7 +147,7 @@ print("\nMacro-F1:", macro_f1)
 model.config.id2label = {i: label for i, label in enumerate(label_names)}
 model.config.label2id = {label: i for i, label in enumerate(label_names)}
 
-model.save_pretrained("./fine_tuned_model")
-tokenizer.save_pretrained("./fine_tuned_model")
+model.save_pretrained(MODEL_PATH)
+tokenizer.save_pretrained(MODEL_PATH)
 
 print("\nRetraining complete. Model updated.")
