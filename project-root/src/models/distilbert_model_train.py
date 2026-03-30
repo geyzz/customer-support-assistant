@@ -3,15 +3,21 @@ from sklearn.metrics import classification_report, confusion_matrix, f1_score
 from transformers import DistilBertForSequenceClassification, DistilBertTokenizer,TrainingArguments, Trainer, EarlyStoppingCallback
 import numpy as np
 import evaluate
+import os
 
+# PATHS
+BASE = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.join(BASE, "../../output")
+MODEL_PATH = os.path.join(BASE, "../../experiments/results/fine_tuned_model")
+RESULTS_PATH = os.path.join(BASE, "../../experiments/results/checkpoints")
 
 # Load dataset
 dataset = load_dataset(
     "csv",
     data_files={
-        "train": "output/train.csv",
-        "validation": "output/validation.csv",
-        "test": "output/test.csv"
+        "train": os.path.join(OUTPUT_DIR, "train.csv"),
+        "validation": os.path.join(OUTPUT_DIR, "validation.csv"),
+        "test": os.path.join(OUTPUT_DIR, "test.csv")
     }
 )
 
@@ -52,7 +58,7 @@ def compute_metrics(eval_pred):
     }
   
 training_args = TrainingArguments(
-    output_dir="./results",
+    output_dir=RESULTS_PATH,
     eval_strategy="epoch",      # evaluate at the end of each epoch
     save_strategy="epoch",            # save checkpoint each epoch
     learning_rate=2e-5,
@@ -102,5 +108,5 @@ model.config.id2label = {i: label for i, label in enumerate(label_names)}
 model.config.label2id = {label: i for i, label in enumerate(label_names)}
        
 # Save the model and tokenizer
-model.save_pretrained("project-root/experiments/results/fine_tuned_model")
-tokenizer.save_pretrained("project-root/experiments/results/fine_tuned_model")
+model.save_pretrained(MODEL_PATH)
+tokenizer.save_pretrained(MODEL_PATH)
