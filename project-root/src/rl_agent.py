@@ -22,9 +22,11 @@ class LinUCB:
             A_inv = np.linalg.inv(self.A[a])
             theta = A_inv @ self.b[a]
 
+            context_vector = context_vector.reshape(-1, 1)
+
             p = float(
-                theta.T @ context_vector +
-                self.alpha * np.sqrt(context_vector.T @ A_inv @ context_vector)
+                (theta.T @ context_vector).item() +
+                self.alpha * np.sqrt((context_vector.T @ A_inv @ context_vector).item())
             )
 
             p_values.append(p)
