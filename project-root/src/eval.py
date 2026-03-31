@@ -302,6 +302,7 @@ if rl_available:
             if conf >= 0.70:
                 action_idx = pred_idx
             else:
+                ctx = np.array(ctx).reshape(-1, 1)
                 action_idx = agent.select_action(ctx, pred_idx, conf)
 
             action_str = ACTIONS[action_idx]
